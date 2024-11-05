@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fondo2 content-wrapper">
+    <main class="container full-height text-center">
+        <h1 class="display-5 text-secondary-emphasis fw-semibold"> Padron </h1>
+        <div class="row">
+            <!-- muestra los mensajes de exito/error del sistema de mensajes de django -->
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <h4 class="text-center text-info-emphasis" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{message}}
+                    </h4>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            <!-- <h4 class="text-center text-info-emphasis">
+                 Si existe la variable mensaje, la muestra 
+                {{mensaje}}
+            </h4> -->
+
+            <div class="col-2">
+                <div class="p-4 mb-4 bg-light rounded-3 custom-shadow">
+                    <h3 class="display-5 text-secondary-emphasis fw-semibold mb-3">Menu</h3>
+
+                    <!-- modal para Dar de alta un jugador -->
+                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">Dar de alta jugador</button>
+                    <div class="modal fade" id="ingresarModal" tabindex="-1" aria-labelledby="ingresarModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content section-general border"><i class="bi bi-save-fill icono-persona"></i>
+                                <div class="modal-header ">
+                                    <h1 class="modal-title" id="ingresarModalLabel">Dar de alta jugador</h1>
+                                    
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                
+                                <section class="modal-body">
+                                    <form method="POST" action="{% url 'createJugador' %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="nombre">Nombre </label>
+                                            <input type="text" placeholder="escribe tu nombre completo" 
+                                            name="nombre" id="nombre" class="form-control" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="apellido">Apellido:</label>
+                                            <input type="text" placeholder="escribe tu apellido completo" 
+                                            name="apellido" id="apellido" class="form-control" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="opciones">Tipo de Documento</label>
+                                            <select class="form-select" name="opciones" id="opciones" required>
+                                                <option value="" disabled selected>Selecciona un tipo de documento</option>
+                                                <option value="DNI">DNI</option>
+                                                <option value="Pasaporte">Pasaporte</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="Documento">Documento:</label>
+                                            <input type="number" placeholder="Documento" 
+                                            name="Documento" id="Documento" class="form-control" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                                            <input type="date" name="fechaNacimiento" id="fechaNacimiento" class="form-control" 
+                                                min="1800-01-01" max="2021-12-31" required>
+                                        </div>
+                                        
+
+                                        <div class="mb-3">
+                                            <label for="email">Correo Electrónico:</label>
+                                            <input type="email" placeholder="Correo electrónico" name="email" id="email" class="form-control" required>
+                                        </div>
+
+                                        <div class="mb-3">
+                                            <label for="club">Elige club:</label>
+                                            <select class="form-select" name="club" id="club" required>
+                                                <option value="" disabled selected>Selecciona un club</option>
+                                                {% for club in clubes %}
+                                                    <option value="{{ club.id }}">{{ club.nombre }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                        
+                                        <div class="text-center">
+                                            <button class="btn btn-dark">
+                                                Crear
+                                            </button>
+                                        </div>
+                        
+                                    </form>
+                                </section>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <br> <br> <br>
+                    <!-- FIlto de busqueda por nombre -->
+                    <div class="mt-4">
+                        <form method="GET" action="{% url 'padronHome' %}">
+                            <div class="m-3">
+                                <input type="text" name="search" placeholder="Buscar por nombre" value="{{ search }}" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-dark">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% if padron %}
+            <div class="col-10">
+                <!-- Filtros y paginación-->
+                <div class="row mb-2">
+                    <!-- Botones de paginación -->
+                    <div class="col-5">
+                        <div class="pagination">
+                            <div class="col">
+                                {% if padron.has_previous %}
+                                    <a href="?page=1" class="btn btn-light"> <i class="bi bi-chevron-bar-right"></i> </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if padron.has_previous %}
+                                    <a href="?page={{ padron.previous_page_number }}" class="btn btn-light">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <p class="fw-bold">
+                                    Pagina {{ padron.number }} de {{ padron.paginator.num_pages }}
+                                </p>
+                            </div>
+                            <div class="col">
+                                {% if padron.has_next %}
+                                    <a href="?page={{ padron.next_page_number }}" class="btn btn-light fw-bold">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if padron.has_next %}
+                                    <a href="?page={{ padron.paginator.num_pages }}" class="btn btn-light fw-bold">
+                                        <i class="bi bi-chevron-bar-right"></i>     
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Enlaces para ordenar -->
+                    <div class="col-2">
+                        <a href="?order=desc" class="btn btn-light">
+                            <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" 
+                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" 
+                            color="#000000"><path d="M14 10L2 10" stroke="#000000" stroke-width="1.5" 
+                            stroke-linecap="round" stroke-linejoin="round"></path><path d="M10 14H2" stroke="#000000" 
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 18H2"
+                             stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            </path><path d="M18 6L2 6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" 
+                            stroke-linejoin="round"></path><path d="M19 10V20M19 20L22 17M19 20L16 17" stroke="#000000" 
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </a>
+                        <a href="?order=asc" class="btn btn-light">
+                            <?xml version="1.0" encoding="UTF-8"?><svg width="24px" 
+                            height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" 
+                            xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M14 14L2 14" stroke="#000000" 
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10 10H2" 
+                            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path 
+                            d="M6 6H2" stroke="#000000" stroke-width="1.5" stroke-linecap="round" 
+                            stroke-linejoin="round"></path><path d="M18 18H2" stroke="#000000" stroke-width="1.5" 
+                            stroke-linecap="round" stroke-linejoin="round"></path><path d="M19 14V4M19 4L22 7M19 4L16 7" 
+                            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </a>  
+                    </div>
+                </div>
+                
+                <!-- tabla de clubes -->
+                <table class="table table-striped-columns table-light table-bordered table-sm">
+                    <thead class=" table-success">
+                        <tr>
+                            <th class="">Nombre</th>
+                            <th class="">Apellido</th>
+                            <th class="">Tipo de Documento</th>
+                            <th class="">Documento</th>
+                            <th class="">Fecha de Nacimiento</th>
+                            <th class="">E-mail</th>
+                            <th class="">Club</th>
+                            <th class="">Modificar</th>
+                            <th class="">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        {% for jugador in padron %}
+                            <tr>
+                                <th class="" scope="row">{{jugador.nombre}}</th>
+                                <td class="">{{jugador.apellido}}</td>
+                                <td class="">{{jugador.idTipoDoc}}</td>
+                                <td class="">{{jugador.nroDoc}}</td>
+                                <td class="">{{jugador.fechaNacimiento.day}}/{{jugador.fechaNacimiento.month}}/{{jugador.fechaNacimiento.year}}</td>
+                                <td class="">{{jugador.email}}</td>
+                                <td class="">{{jugador.club}}</td>
+                                <td class="">
+                                    <!-- modal para modificar un club, cada objeto de la lista tiene su propio modal, se enlaza con el id -->
+                                    <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark"
+                                    type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modificarModal-{{jugador.id}}" data-bs-whatever="@mdo">
+                                        <i class="bi bi-pencil-square"></i>                                  
+                                    </a>
+                                    <div class="modal fade" id="modificarModal-{{jugador.id}}" tabindex="-1" aria-labelledby="modificarModalLabel-{{jugador.id}}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content section-general border"><i class="bi bi-save-fill icono-persona"></i>
+                                                <div class="modal-header ">
+                                                    <h4 class="modal-title" id="modificarModalLabel-{{jugador.id}}">Modificar el jugador '{{jugador.nombre}}'</h4>
+                                                    
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                
+                                                <section class="modal-body">
+                                                    <form method="POST" action="{% url 'detailsJugador' jugador.id %}">
+                                                        {% csrf_token %}
+                                                        <div class="mb-3">
+                                                            <label for="nombre">Nombre:</label>
+                                                            <input type="text" value="{{ jugador.nombre }}" 
+                                                            name="nombre" id="nombre" class="form-control" required>
+                                                        </div>
+                                                        
+                                                        <div class="mb-3">
+                                                            <label for="apellido">Apellido:</label>
+                                                            <input type="text" value="{{ jugador.apellido }}" 
+                                                            name="apellido" id="apellido" class="form-control" required>
+                                                        </div>
+                                    
+                                                        <div class="mb-3">
+                                                            <label for="idTipoDoc">Tipo de Documento:</label>
+                                                            <select class="form-select" name="idTipoDoc" id="idTipoDoc" required>
+                                                                <option value="DNI" {% if jugador.idTipoDoc.tipoDoc == "DNI" %} selected {% endif %} > DNI </option>
+                                                                <option value="Pasaporte" {% if jugador.idTipoDoc.tipoDoc == "Pasaporte" %} selected {% endif %} > Pasaporte </option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="nroDoc">Documento:</label>
+                                                            <input type="tel" value="{{ jugador.nroDoc }}" 
+                                                            name="nroDoc" id="nroDoc" class="form-control" required>
+                                                        </div>
+                                    
+                                                        <div class="mb-3">
+                                                            <label for="genero">Género:</label>
+                                                            <select class="form-select" name="genero" id="genero" required>
+                                                                <option value="Femenino"> Femenino </option>
+                                                                <option value="Masculino"> Masculino </option>
+                                                            </select>
+                                                        </div>
+
+                                                        <div class="mb-3">
+                                                            <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                                                            <input type="date"  value="{{ jugador.fechaNacimiento }}" 
+                                                            name="fechaNacimiento" id="fechaNacimiento" class="form-control" 
+                                                                   min="1800-01-01" max="2021-12-31" required>
+                                                        </div>
+                                                        
+                    
+                                                        <div class="mb-3">
+                                                            <label for="email">Correo Electrónico:</label>
+                                                            <input type="email" value="{{ jugador.email }}"
+                                                            placeholder="Correo electrónico" name="email" id="email" class="form-control" required>
+                                                        </div>
+                    
+                                                        <div class="mb-3">
+                                                            <label for="club">Elige club:</label>
+                                                            <select class="form-select" name="club" id="club" required>
+                                                                <option value="" disabled selected>Selecciona un club</option>
+                                                                {% for club in clubes %}
+                                                                    <option value="{{ club.id }}">{{ club.nombre }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                        <div class="text-center">
+                                                            <button class="btn btn-dark">
+                                                                Guardar cambios
+                                                            </button>
+                                                        </div>
+                                        
+                                                    </form> 
+
+                                                </section>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </td>
+                                <td>
+                                    <!-- modal para confirmar la eliminacion del club, cada objeto de la lista tiene su propio modal, se enlaza con el id -->
+                                    <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark"
+                                    type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#eliminarModal-{{jugador.id}}" data-bs-whatever="@mdo">
+                                        <i class="bi bi-trash-fill"></i>                                    
+                                    </a>
+                                    <div class="modal fade" id="eliminarModal-{{jugador.id}}" tabindex="-1" aria-labelledby="eliminarModalLabel-{{jugador.id}}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content section-general border"><i class="bi bi-save-fill icono-persona"></i>
+                                                <div class="modal-header ">
+                                                    <h4 class="modal-title" id="eliminarModalLabel-{{jugador.id}}">¿Está seguro de borrar el club {{jugador.nombre}}?</h4>
+                                                    
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                
+                                                <section class="modal-body">
+                                                    <a href="{% url 'deleteJugador' jugador.id %}" class="btn btn-danger">
+                                                        Eliminar Jugador                                  
+                                                    </a>
+                                                </section>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+        
+    </main>
+</div>
+{% endblock %}

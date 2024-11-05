@@ -1,0 +1,196 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fondo2 content-wrapper">
+    <main class="container full-height text-center">
+        <h1 class="display-5 text-secondary-emphasis fw-semibold"> Torneos </h1>
+        <div class="row">
+            <!-- muestra los mensajes de exito/error del sistema de mensajes de django -->
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <h5 class="text-center text-info-emphasis" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{message}}
+                    </h5>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="col-2">
+                <div class="p-4 mb-4 bg-light rounded-3 custom-shadow">
+                    <h3 class="display-5 text-secondary-emphasis fw-semibold mb-3">Menu</h3>
+
+                    <!-- modal para ingresar Torneo -->
+                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">Crear Torneo</button>
+                    <div class="modal fade" id="ingresarModal" tabindex="-1" aria-labelledby="ingresarModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content section-general border"><i class="bi bi-save-fill icono-persona"></i>
+                                <div class="modal-header ">
+                                    <h1 class="modal-title" id="ingresarModalLabel">Crear Torneo</h1>
+                                    
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                
+                                <section class="modal-body">
+                                    <form method="POST" action="{% url 'createTorneo' %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="nombre">Nombre:</label>
+                                            <input type="text" placeholder="escribe el nombre del club" 
+                                            name="nombre" id="nombre" class="form-control" required>
+                                        </div>
+                                    
+                                        <div class="text-center">
+                                            <button class="btn btn-dark">
+                                                Crear
+                                            </button>
+                                        </div>
+                        
+                                    </form>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                    <br> <br>
+                    <!-- Muestra todos los torneos y permite seleccionar uno -->
+                    <div>
+                        <ul class="list-group">
+                            {% for torneo in torneos %}
+                                <li class="list-group-item list-group-item-secondary">
+                                    <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark" 
+                                    href="{% url 'torneoHome' torneo.id %}"> {{torneo.nombre}} </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            {% if torneo %}
+            <div class="col-10">
+                <!-- paginación-->
+                <div class="row mb-2">
+                    <!-- nombre del torneo -->
+                     <div class="col-7">
+                        <h2>{{torneo.nombre}}</h2>
+                     </div>
+                    <!-- Botones de paginación -->
+                    <div class="col-5">
+                        <div class="pagination">
+                            <div class="col">
+                                {% if jornadas.has_previous %}
+                                    <a href="?page=1" class="btn btn-light"> <i class="bi bi-chevron-bar-right"></i> </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if jornadas.has_previous %}
+                                    <a href="?page={{ jornadas.previous_page_number }}" class="btn btn-light">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <p class="fw-bold">
+                                    Jornada {{ jornadas.number }} de {{ jornadas.paginator.num_pages }}
+                                </p>
+                            </div>
+                            <div class="col">
+                                {% if jornadas.has_next %}
+                                    <a href="?page={{ jornadas.next_page_number }}" class="btn btn-light fw-bold">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if jornadas.has_next %}
+                                    <a href="?page={{ jornadas.paginator.num_pages }}" class="btn btn-light fw-bold">
+                                        <i class="bi bi-chevron-bar-right"></i>     
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- tabla de los partidos de la jornada -->
+                <table class="table table-striped-columns table-light table-bordered table-sm">
+                    <thead class=" table-success">
+                        <tr class="row">
+                            <th class="col-1">Jornada</th>
+                            <th class="col-5">Local</th>
+                            <th class="col-5">Visitante</th>
+                            <th class="col-1">Modificar</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        {% for partido in partidos %}
+                            <tr class="row">
+                                <th class="col-1" scope="row">{{jornada_actual.numero}}</th>
+                                <td class="col-4">{{partido.local}}</td>
+                                <td class="col-1">
+                                    {% if partido.juegosLocal >= 0 %}
+                                        {{partido.juegosLocal}}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="col-1">
+                                    {% if partido.juegosVisitante >= 0 %}
+                                        {{partido.juegosVisitante}}
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td class="col-4">{{partido.visitante}}</td>
+                                <td class="col-1">
+                                    <!-- Boton del Modal para modificar el resultado de un partido -->
+                                    <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark"
+                                    type="button" data-bs-toggle="modal" data-bs-target="#modificarModal-{{partido.id}}" data-bs-whatever="@mdo">
+                                    <i class="bi bi-pencil-square"></i>                                  
+                                    </a>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="modificarModal-{{partido.id}}" tabindex="-1" aria-labelledby="modificarModalLabel-{{partido.id}}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content section-general border">
+                                            <i class="bi bi-save-fill icono-persona"></i>
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="modificarModalLabel-{{partido.id}}">Modificar resultado</h4>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            
+                                            <section class="modal-body">
+                                                <form method="POST" action="{% url 'modificarPartido' partido.id %}">
+                                                    {% csrf_token %}
+                                                    <div class="mb-3">
+                                                        <label for="local">Ingrese los goles del equipo local {{partido.local}}:</label>
+                                                        <input type="number" placeholder="goles local" min="0" step="1"
+                                                        name="local" id="local" class="form-control" required>
+                                                    </div>
+
+                                                    <div class="mb-3">
+                                                        <label for="visitante">Ingrese los goles del equipo visitante {{partido.visitante}}:</label>
+                                                        <input type="number" placeholder="goles visita" min="0" step="1"
+                                                        name="visitante" id="visitante" class="form-control" required>
+                                                    </div>
+
+                                                    <div class="text-center">
+                                                        <button class="btn btn-dark">Guardar cambios</button>
+                                                    </div>
+                                                </form>
+                                            </section>
+                                            
+                                        </div>
+                                    </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fondo1 content-wrapper">
+    <main class="container py-3 full-height">
+        <div class="row">
+            <section class="col-md-4 offset-md-4 mt-5">
+                <form method="POST" class="card card-body bg-light-subtle ">
+                    <h1 class="text-center">Registrarse</h1>
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username">Nombre de usuario:</label>
+                        <input type="text" placeholder="escribe tu Nombre de usuario" name="username" id="username" class="form-control">
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="password1">Contraseña:</label>
+                        <input type="password" placeholder="escribe tu contraseña" name="password1" id="password1" class="form-control">
+                    </div>
+    
+                    <div class="mb-3">
+                        <label for="password2">Confirma tu contraseña:</label>
+                        <input type="password" placeholder="Escribe tu contraseña de nuevo" name="password2" id="password2" class="form-control">
+                    </div>
+                    
+                    <p class="text-center text-danger">
+                        <!-- Si existe la variable error, la muestra -->
+                        {{error}}
+                    </p>
+    
+                    <div class="text-center">
+                        <button class="btn btn-dark">
+                            Registrar
+                        </button>
+                    </div>
+    
+                </form>
+            </section>
+        </div>
+    </main>
+</div>
+    
+{% endblock %}

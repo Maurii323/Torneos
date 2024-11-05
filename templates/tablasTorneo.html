@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fondo2 content-wrapper">
+    <main class="container full-height text-center">
+        <h1 class="display-5 text-secondary-emphasis fw-semibold"> Tablas </h1>
+        <div class="row">
+            <!-- muestra los mensajes de exito/error del sistema de mensajes de django -->
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <h5 class="text-center text-info-emphasis" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{message}}
+                    </h5>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="col-2">
+                <div class="p-4 mb-4 bg-light rounded-3 custom-shadow">
+                    <h3 class="display-5 text-secondary-emphasis fw-semibold mb-3">Menu</h3>
+                    <br> <br>
+                    <!-- Muestra todos los torneos y permite seleccionar uno -->
+                    <div>
+                        <ul class="list-group">
+                            {% for torneo in torneos %}
+                                <li class="list-group-item list-group-item-secondary">
+                                    <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark" 
+                                    href="{% url 'tablasHome' torneo.id %}"> {{torneo.nombre}} </a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+            {% if torneo %}
+            <div class="col-10">
+                <!-- paginación-->
+                <div class="row mb-2">
+                    <!-- nombre del torneo -->
+                     <div class="col-7">
+                        <h2>{{torneo.nombre}}</h2>
+                     </div>
+                    <!-- Botones de paginación -->
+                    <div class="col-5">
+                        <div class="pagination">
+                            <div class="col">
+                                {% if posiciones.has_previous %}
+                                    <a href="?page=1" class="btn btn-light"> <i class="bi bi-chevron-bar-right"></i> </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if posiciones.has_previous %}
+                                    <a href="?page={{ posiciones.previous_page_number }}" class="btn btn-light">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <p class="fw-bold">
+                                    Pagina {{ posiciones.number }} de {{ posiciones.paginator.num_pages }}
+                                </p>
+                            </div>
+                            <div class="col">
+                                {% if posiciones.has_next %}
+                                    <a href="?page={{ posiciones.next_page_number }}" class="btn btn-light fw-bold">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if posiciones.has_next %}
+                                    <a href="?page={{ posiciones.paginator.num_pages }}" class="btn btn-light fw-bold">
+                                        <i class="bi bi-chevron-bar-right"></i>     
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- tabla de los partidos de la jornada -->
+                <table class="table table-striped-columns table-light table-bordered table-sm">
+                    <thead class=" table-success">
+                        <tr class="row">
+                            <th class="col-1">Posicion</th>
+                            <th class="col-3">Club</th>
+                            <th class="col-2">Puntos</th>
+                            <th class="col-1">PJ</th>
+                            <th class="col-1">PG</th>
+                            <th class="col-1">PP</th>
+                            <th class="col-1">PE</th>
+                            <th class="col-2">Dif Gol</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        {% for posicion in posiciones %}
+                            <tr class="row">
+                                <th class="col-1" scope="row"> {{posicion.posicion}} </th>
+                                <td class="col-3"> {{posicion.club}} </td>
+                                <td class="col-2 fw-bold"> {{posicion.puntaje}} </td>
+                                <td class="col-1"> {{posicion.partidosJugados}} </td>
+                                <td class="col-1"> {{posicion.partidosGanados}} </td>
+                                <td class="col-1"> {{posicion.partidosPerdidos}} </td>
+                                <td class="col-1"> {{posicion.partidosEmpatados}} </td>
+                                <td class="col-2"> {{posicion.diferenciaJuegos}} </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+</div>
+{% endblock %}

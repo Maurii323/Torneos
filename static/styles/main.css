@@ -1,0 +1,154 @@
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-attachment: fixed; 
+    overflow-x: hidden; 
+}
+/* Ajusta la altura del contenedor de la imagen de fondo para ocupar toda la altura de la pantalla menos
+ la altura de la barra de navegación (56px) */
+ .content-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh; /* Asegura que el contenido se expanda al 100% de la pantalla */
+}
+
+
+    /* Ajustar el margen y el relleno de los elementos que estén provocando el espacio en blanco */
+main.container {
+    padding: 20px 0;
+}
+/* FUentes tipograficas*/
+body {
+    font-family: 'Oswald', sans-serif;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-attachment: scroll; /* Hace el fondo "sticky" */
+    height: 100%;
+    overflow-x: hidden; 
+}
+  
+h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 300; /* Puedes cambiar el peso según lo que prefieras */
+    letter-spacing: 2px;
+}
+  
+h2{
+    font-family: 'Oswald', sans-serif;
+    font-weight: 200; /* Puedes cambiar el peso según lo que prefieras */
+    letter-spacing: 2px;
+}
+
+h3{
+    font-family: 'Oswald', sans-serif;
+    font-weight: 100; /* Puedes cambiar el peso según lo que prefieras */
+    letter-spacing: 2px;
+}
+
+.fuente_chica{
+      font-size: 25px;
+}
+  
+.text-right {
+      text-align: right;
+}
+  
+.espaciado{
+      letter-spacing: 1px;
+}
+
+.fondo1 {
+    background-image: url("../images/fondoF4.avif");
+    background-size: cover;             /* Ajusta la imagen para cubrir todo el fondo */
+    background-repeat: no-repeat;       /* Evita que la imagen se repita */
+    background-position: center center; /* Centra la imagen */
+}
+
+.fondo2 {
+    background-image: url("../images/fondoF3.avif");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed; /* Hace el fondo "sticky" */
+    min-height: 100vh;
+}
+
+.rounded-frame {
+    border-radius: 50%; /* Hace que la imagen sea redonda */
+    border: 5px solid #fff; /* Define el color y grosor del marco */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Añade una sombra */
+    width: 150px;
+    height: 150px;
+    object-fit: cover; /* Ajusta la imagen para que se recorte adecuadamente */
+}
+
+.espaciadoTabla {
+    padding: 10px; 
+}
+
+/*botones*/
+.login-button {
+    background-color: rgb(0, 0, 0);
+    border: none;
+    color: white;
+    padding: 10px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    display: block;
+    width: 80%;
+    margin: 10px auto; /* Cambia 'margin-top' por 'margin' para centrar */
+    text-align: center;
+    text-decoration: none;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.5); 
+}
+
+/*box con sombra*/
+.narrow-box {
+    background-color: rgba(255, 255, 255, 0.8);
+    width: 200px; /* Ancho del rectángulo angosto */
+    height: auto; /* Ajustar la altura automáticamente */
+    padding: 10px; /* Espaciado interno */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 2px 8px 16px rgba(0, 0, 0, 1);
+    color: black; /* Color del texto */
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centrar los contenidos horizontalmente */
+}
+
+.custom-shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 6px 20px rgba(0, 0, 0, 0.5);
+}
+
+.separator .nav-link {
+    padding: 0; /* Opcional para ajustar el espaciado */
+    color: #fff; /* Cambiar color según tus preferencias */
+}
+
+
+/*botones PDF*/
+.btn-generate-pdf {
+    background-color: grey; /* Fondo negro */
+    color: white; /* Letras blancas */
+    padding: 8px 10px; /* Espaciado alrededor del texto */
+    border-radius: 5px; /* Bordes redondeados */
+    display: inline-flex; /* Alinear ícono y texto */
+    align-items: center; /* Centrar verticalmente */
+    cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+    text-decoration: none; /* Sin subrayado */
+    border: none; /* Sin borde */
+    outline: none;
+}
+
+.btn-generate-pdf i {
+    margin-right: 5px; /* Espacio entre ícono y texto */
+}
+
+.btn-generate-pdf:hover {
+    background-color: #333; /* Cambiar el fondo en hover */
+}

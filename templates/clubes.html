@@ -1,0 +1,243 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="fondo2 content-wrapper">
+    <main class="container full-height text-center">
+        <h1 class="display-5 text-secondary-emphasis fw-semibold"> Clubes </h1>
+        <div class="row">
+            <!-- muestra los mensajes de exito/error del sistema de mensajes de django -->
+            {% if messages %}
+                <ul class="messages">
+                {% for message in messages %}
+                    <h4 class="text-center text-info-emphasis" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                        {{message}}
+                    </h4>
+                {% endfor %}
+                </ul>
+            {% endif %}
+
+            <div class="col-2 ">
+                <div class="p-4 mb-4 bg-light rounded-3 custom-shadow ">
+                    <h3 >Menú</h3>
+                    
+                    <!-- Modal para ingresar club -->
+                    <button type="button" class="btn btn-dark mb-3 login-button" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">Ingresar Club</button>
+                    <div class="modal fade" id="ingresarModal" tabindex="-1" aria-labelledby="ingresarModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content section-general border">
+                                <div class="modal-header">
+                                    <h1 class="modal-title" id="ingresarModalLabel">Crear Club</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <section class="modal-body">
+                                    <form method="POST" action="{% url 'createClub' %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label for="nombre">Nombre:</label>
+                                            <input type="text" placeholder="Escribe el nombre del club" name="nombre" id="nombre" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="direccion">Dirección:</label>
+                                            <input type="text" placeholder="Escribe la dirección del club" name="direccion" id="direccion" class="form-control" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="telefono">Teléfono:</label>
+                                            <input type="tel" placeholder="Escribe el teléfono del club" name="telefono" id="telefono" class="form-control" pattern="^\+?[0-9]{10,15}$" required>
+                                        </div>
+                                        <div class="text-center">
+                                            <button class="btn btn-dark">
+                                                Crear
+                                            </button>
+                                        </div>
+                                    </form>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="separator-line">
+                    <!-- Filtro de búsqueda por nombre -->
+                    <div class="mt-4">
+                        <form method="GET" action="{% url 'clubHome' %}">
+                            <div class="m-3">
+                                <input type="text" name="search" placeholder="Buscar por nombre" value="{{ search }}" class="form-control">
+                            </div>
+                            <button type="submit" class="btn btn-dark login-button">Buscar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            
+            {% if clubes %}
+            <div class="col-10">
+                <!-- Filtros y paginación-->
+                <div class="row mb-2 ">
+                    <!-- Botones de paginación -->
+                    <div class="col-5">
+                        <div class="pagination">
+                            <div class="col">
+                                {% if clubes.has_previous %}
+                                    <a href="?page=1" class="btn btn-light"> <i class="bi bi-chevron-bar-right"></i> </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if clubes.has_previous %}
+                                    <a href="?page={{ clubes.previous_page_number }}" class="btn btn-light">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                <p class="fw-bold">
+                                    Pagina {{ clubes.number }} de {{ clubes.paginator.num_pages }}
+                                </p>
+                            </div>
+                            <div class="col">
+                                {% if clubes.has_next %}
+                                    <a href="?page={{ clubes.next_page_number }}" class="btn btn-light fw-bold">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                {% endif %}
+                            </div>
+                            <div class="col">
+                                {% if clubes.has_next %}
+                                    <a href="?page={{ clubes.paginator.num_pages }}" class="btn btn-light fw-bold">
+                                        <i class="bi bi-chevron-bar-right"></i>     
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Enlaces para ordenar -->
+                    <div class="col-2">
+                        <a href="?order=desc" class="btn btn-light">
+                            <?xml version="1.0" encoding="UTF-8"?><svg width="24px" height="24px" stroke-width="1.5" 
+                            viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" 
+                            color="#000000"><path d="M14 10L2 10" stroke="#000000" stroke-width="1.5" 
+                            stroke-linecap="round" stroke-linejoin="round"></path><path d="M10 14H2" stroke="#000000" 
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M6 18H2"
+                             stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            </path><path d="M18 6L2 6" stroke="#000000" stroke-width="1.5" stroke-linecap="round" 
+                            stroke-linejoin="round"></path><path d="M19 10V20M19 20L22 17M19 20L16 17" stroke="#000000" 
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </a>
+                        <a href="?order=asc" class="btn btn-light">
+                            <?xml version="1.0" encoding="UTF-8"?><svg width="24px" 
+                            height="24px" stroke-width="1.5" viewBox="0 0 24 24" fill="none" 
+                            xmlns="http://www.w3.org/2000/svg" color="#000000"><path d="M14 14L2 14" stroke="#000000" 
+                            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M10 10H2" 
+                            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path 
+                            d="M6 6H2" stroke="#000000" stroke-width="1.5" stroke-linecap="round" 
+                            stroke-linejoin="round"></path><path d="M18 18H2" stroke="#000000" stroke-width="1.5" 
+                            stroke-linecap="round" stroke-linejoin="round"></path><path d="M19 14V4M19 4L22 7M19 4L16 7" 
+                            stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                        </a>  
+                    </div>
+                </div>
+                
+                <!-- tabla de clubes -->
+                <table class="table table-striped-columns table-light table-bordered table-sm custom-shadow">
+                    <thead class=" table-success">
+                        <tr>
+                            <th class="">Nombre</th>
+                            <th class="">Direccion</th>
+                            <th class="">Telefono</th>
+                            <th class="">Fecha Alta</th>
+                            <th class="">Modificar</th>
+                            <th class="">Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody >
+                        {% for club in clubes %}
+                            <tr>
+                                <th class="" scope="row">{{club.nombre}}</th>
+                                <td class="">{{club.direccion}}</td>
+                                <td class="">{{club.telefono}}</td>
+                                <td class="">{{club.fechaAlta.day}}/{{club.fechaAlta.month}}/{{club.fechaAlta.year}}</td>
+                                <td class="">
+                                    <!-- modal para modificar un club, cada objeto de la lista tiene su propio modal, se enlaza con el id -->
+                                    <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark"
+                                    type="button" class="btn btn-dark login-button" data-bs-toggle="modal" data-bs-target="#modificarModal-{{club.id}}" data-bs-whatever="@mdo">
+                                        <i class="bi bi-pencil-square"></i>                                  
+                                    </a>
+                                    <div class="modal fade" id="modificarModal-{{club.id}}" tabindex="-1" aria-labelledby="modificarModalLabel-{{club.id}}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content section-general border"><i class="bi bi-save-fill icono-persona"></i>
+                                                <div class="modal-header ">
+                                                    <h4 class="modal-title" id="modificarModalLabel-{{club.id}}">Modificar el club '{{club.nombre}}'</h4>
+                                                    
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                
+                                                <section class="modal-body">
+                                                    <form method="POST" action="{% url 'detailsClub' club.id %}">
+                                                        {% csrf_token %}
+                                                        <div class="mb-3">
+                                                            <label for="nombre">Nombre:</label>
+                                                            <input type="text" value="{{ club.nombre }}" 
+                                                            name="nombre" id="nombre" class="form-control" required>
+                                                        </div>
+                                    
+                                                        <div class="mb-3">
+                                                            <label for="direccion">Direccion:</label>
+                                                            <input type="text" value="{{ club.direccion }}" 
+                                                            name="direccion" id="direccion" class="form-control" required>
+                                                        </div>
+                                    
+                                                        <div class="mb-3">
+                                                            <label for="telefono">Telefono</label>
+                                                            <input type="tel" value="{{ club.telefono }}" 
+                                                            name="telefono" id="telefono" class="form-control" pattern="^\+?[0-9]{10,15}$" required>
+                                                        </div>
+                                        
+                                                        <div class="text-center">
+                                                            <button class="btn btn-dark login-button">
+                                                                Guardar cambios
+                                                            </button>
+                                                        </div>
+                                        
+                                                    </form>
+
+                                                </section>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </td>
+                                <td>
+                                    <!-- modal para confirmar la eliminacion del club, cada objeto de la lista tiene su propio modal, se enlaza con el id -->
+                                    <a class="link-offset-2 link-underline link-underline-opacity-0 text-dark"
+                                    type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#eliminarModal-{{club.id}}" data-bs-whatever="@mdo">
+                                        <i class="bi bi-trash-fill"></i>                                    
+                                    </a>
+                                    <div class="modal fade" id="eliminarModal-{{club.id}}" tabindex="-1" aria-labelledby="eliminarModalLabel-{{club.id}}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content section-general border"><i class="bi bi-save-fill icono-persona"></i>
+                                                <div class="modal-header ">
+                                                    <h4 class="modal-title" id="eliminarModalLabel-{{club.id}}">¿Está seguro de borrar el club {{club.nombre}}?</h4>
+                                                    
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                
+                                                <section class="modal-body">
+                                                    <a href="{% url 'deleteClub' club.id %}" class="btn btn-danger">
+                                                        Eliminar Club                                  
+                                                    </a>
+                                                </section>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+        
+    </main>
+</div>
+{% endblock %}

@@ -103,7 +103,17 @@ def createTorneo(request):
     except IntegrityError:                         # maneja la excepcion de que el torneo ya existe en la base de datos
         messages.error(request, f"el nombre del torneo ingresado ya existe")
         return redirect(reverse('torneoHome'))
-    
+
+# permite eliminar un torneo
+def deleteTorneo(request,IDTorneo):
+    try:
+        torneo = get_object_or_404(Torneo, pk=IDTorneo)
+        torneo.delete()
+        messages.success(request, f"Se ha eliminado el torneo '{torneo.nombre}' exitosamente")
+        return redirect(reverse('torneoHome'))
+    except Club.DoesNotExist:
+        messages.error(request, f"error al eliminar el torneo, no existe")
+        return redirect(reverse('torneoHome'))
 
 # permite modificar un partido actualizando el puntaje de cada equipo
 @login_required

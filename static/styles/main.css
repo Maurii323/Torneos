@@ -61,14 +61,14 @@ h3{
 }
 
 .fondo1 {
-    background-image: url("../images/fondoF4.avif");
+    background-image: url("../images/fondoF5.jpg");
     background-size: cover;             /* Ajusta la imagen para cubrir todo el fondo */
     background-repeat: no-repeat;       /* Evita que la imagen se repita */
     background-position: center center; /* Centra la imagen */
 }
 
 .fondo2 {
-    background-image: url("../images/fondoF3.avif");
+    background-image: url("../images/fondoF3.jpeg");
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;

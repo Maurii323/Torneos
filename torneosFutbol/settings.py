@@ -11,7 +11,8 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os                   # para acceder a las variables de entorno de render
+import dj_database_url      # para leer las variables de entorno de la base de datos de render
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +22,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7z@!we9i323y336no8tq2h@d_3v_n53_+4!94%2+w*4952hcsc'
+#la secret key la da el hosting como variable de entorno, solamente hay que acceder a esa env 
+SECRET_KEY = os.environ.get('SECRET KEY', default='your secret key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# caracteristica que muestra los errores en detalle si esta activa, en desarrollo: True, en produccion: False 
+# si RENDER esta en las variables de entorno, significa que esta alojado ahi, por lo tanto en produccion
+DEBUG = 'RENDER' not in os.environ
+
 
 ALLOWED_HOSTS = []
+# si existe un host de render(si esta en produccion), lo agrega a los host permitidos
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 
 # Application definition
@@ -52,6 +61,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    # agrega el servicio que utiliza render para servir contenido estatico
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'torneosFutbol.urls'
@@ -77,8 +88,17 @@ WSGI_APPLICATION = 'torneosFutbol.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-DATABASES = {
+# si esta en produccion, usa la base de datos postgres de render, si esta en desarrollo usa la sqlite3 local
+if not DEBUG:
+    DATABASES = {
+        # lee las variables de entorno de la base de datos de render
+        'default': dj_database_url.config(
+            default='postgresql://postgres:postgres@localhost/postgres',    # Postgresql
+            conn_max_age=600
+        )
+    }
+else:
+    DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
@@ -110,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'America/Argentina/Buenos_Aires'
 
 USE_I18N = True
 
@@ -120,7 +140,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/static/'
+
+STATIC_URL = 'static/'
+if not DEBUG:               # si el proyecto esta en produccion, configura los static files en render(whitenoise)
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),

@@ -3,13 +3,13 @@
 {% block content %}
 <div class="fondo2 content-wrapper">
     <main class="container full-height text-center">
-        <h1 class="display-5 text-secondary-emphasis fw-semibold"> Clubes </h1>
+        <h1 class="display-5 text-white fw-semibold"> Clubes </h1>
         <div class="row">
             <!-- muestra los mensajes de exito/error del sistema de mensajes de django -->
             {% if messages %}
                 <ul class="messages">
                 {% for message in messages %}
-                    <h4 class="text-center text-info-emphasis" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    <h4 class="text-center text-danger" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
                         {{message}}
                     </h4>
                 {% endfor %}
@@ -87,7 +87,7 @@
                                 {% endif %}
                             </div>
                             <div class="col">
-                                <p class="fw-bold">
+                                <p class="fw-bold text-white">
                                     Pagina {{ clubes.number }} de {{ clubes.paginator.num_pages }}
                                 </p>
                             </div>

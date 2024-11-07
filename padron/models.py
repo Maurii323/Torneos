@@ -16,11 +16,11 @@ class Padron(models.Model):
     id = models.IntegerField(primary_key = True)
     user = models.ForeignKey(User,null = False, on_delete = models.CASCADE)
     idTipoDoc = models.ForeignKey(Tipo_doc, null = False, on_delete = models.PROTECT) # no permite que se borre ese atributo en la tabla club_Categoria.
-    nroDoc = models.IntegerField(null = False)
+    nroDoc = models.IntegerField(null = False,unique=True)
     nombre = models.CharField(max_length = 45, null = False)
     apellido = models.CharField(max_length = 45, null = False)
     fechaNacimiento = models.DateField(null = False)
-    email = models.CharField(max_length = 45, null = False)
+    email = models.CharField(max_length = 45, null = False,unique=True)
     club = models.ForeignKey(Club, null = False, on_delete = models.CASCADE)
     fechaBaja = models.DateTimeField(null = True, blank = True)
     motivoBaja = models.CharField(max_length = 200, null = True, blank = True)

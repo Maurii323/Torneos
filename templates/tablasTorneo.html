@@ -3,13 +3,13 @@
 {% block content %}
 <div class="fondo2 content-wrapper">
     <main class="container full-height text-center">
-        <h1 class="display-5 text-secondary-emphasis fw-semibold"> Tablas </h1>
+        <h1 class="display-5 text-white fw-semibold"> Tablas </h1>
         <div class="row">
             <!-- muestra los mensajes de exito/error del sistema de mensajes de django -->
             {% if messages %}
                 <ul class="messages">
                 {% for message in messages %}
-                    <h5 class="text-center text-info-emphasis" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    <h5 class="text-center text-danger" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
                         {{message}}
                     </h5>
                 {% endfor %}
@@ -18,10 +18,11 @@
 
             <div class="col-2">
                 <div class="p-4 mb-4 bg-light rounded-3 custom-shadow">
-                    <h3 class="display-5 text-secondary-emphasis fw-semibold mb-3">Menu</h3>
-                    <br> <br>
+                    <h3 >Menú</h3>
                     <!-- Muestra todos los torneos y permite seleccionar uno -->
                     <div>
+                        {% if torneos %}
+                        <p>Seleccione un torneo</p>
                         <ul class="list-group">
                             {% for torneo in torneos %}
                                 <li class="list-group-item list-group-item-secondary">
@@ -30,6 +31,7 @@
                                 </li>
                             {% endfor %}
                         </ul>
+                        {% endif %}
 
                     </div>
                 </div>
@@ -40,7 +42,7 @@
                 <div class="row mb-2">
                     <!-- nombre del torneo -->
                      <div class="col-7">
-                        <h2>{{torneo.nombre}}</h2>
+                        <h2 class="text-white">{{torneo.nombre}}</h2>
                      </div>
                     <!-- Botones de paginación -->
                     <div class="col-5">
@@ -58,7 +60,7 @@
                                 {% endif %}
                             </div>
                             <div class="col">
-                                <p class="fw-bold">
+                                <p class="fw-bold text-white">
                                     Pagina {{ posiciones.number }} de {{ posiciones.paginator.num_pages }}
                                 </p>
                             </div>

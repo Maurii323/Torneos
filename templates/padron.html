@@ -3,13 +3,13 @@
 {% block content %}
 <div class="fondo2 content-wrapper">
     <main class="container full-height text-center">
-        <h1 class="display-5 text-secondary-emphasis fw-semibold"> Padron </h1>
+        <h1 class="display-5 text-white fw-semibold"> Padron </h1>
         <div class="row">
             <!-- muestra los mensajes de exito/error del sistema de mensajes de django -->
             {% if messages %}
                 <ul class="messages">
                 {% for message in messages %}
-                    <h4 class="text-center text-info-emphasis" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
+                    <h4 class="text-center text-danger" {% if message.tags %} class="{{ message.tags }}"{% endif %}>
                         {{message}}
                     </h4>
                 {% endfor %}
@@ -22,10 +22,10 @@
 
             <div class="col-2">
                 <div class="p-4 mb-4 bg-light rounded-3 custom-shadow">
-                    <h3 class="display-5 text-secondary-emphasis fw-semibold mb-3">Menu</h3>
+                    <h3 >Menú</h3>
 
                     <!-- modal para Dar de alta un jugador -->
-                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">Dar de alta jugador</button>
+                    <button type="button" class="btn btn-dark mb-3 login-button" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">Dar de alta jugador</button>
                     <div class="modal fade" id="ingresarModal" tabindex="-1" aria-labelledby="ingresarModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content section-general border"><i class="bi bi-save-fill icono-persona"></i>
@@ -61,7 +61,7 @@
 
                                         <div class="mb-3">
                                             <label for="Documento">Documento:</label>
-                                            <input type="number" placeholder="Documento" 
+                                            <input type="number" placeholder="Documento" min="1000000" max="99999999"
                                             name="Documento" id="Documento" class="form-control" required>
                                         </div>
 
@@ -99,14 +99,14 @@
                             </div>
                         </div>
                     </div>
-                    <br> <br> <br>
+                    <hr class="separator-line">
                     <!-- FIlto de busqueda por nombre -->
                     <div class="mt-4">
                         <form method="GET" action="{% url 'padronHome' %}">
                             <div class="m-3">
-                                <input type="text" name="search" placeholder="Buscar por nombre" value="{{ search }}" class="form-control">
+                                <input type="text" name="search" placeholder="buscar club" value="{{ search }}" class="form-control">
                             </div>
-                            <button type="submit" class="btn btn-dark">Buscar</button>
+                            <button type="submit" class="btn btn-dark mb-3 login-button">Buscar</button>
                         </form>
                     </div>
                 </div>
@@ -131,7 +131,7 @@
                                 {% endif %}
                             </div>
                             <div class="col">
-                                <p class="fw-bold">
+                                <p class="fw-bold text-white">
                                     Pagina {{ padron.number }} de {{ padron.paginator.num_pages }}
                                 </p>
                             </div>
@@ -243,21 +243,13 @@
 
                                                         <div class="mb-3">
                                                             <label for="nroDoc">Documento:</label>
-                                                            <input type="tel" value="{{ jugador.nroDoc }}" 
+                                                            <input type="number" value="{{ jugador.nroDoc }}" min="1000000" max="99999999"
                                                             name="nroDoc" id="nroDoc" class="form-control" required>
-                                                        </div>
-                                    
-                                                        <div class="mb-3">
-                                                            <label for="genero">Género:</label>
-                                                            <select class="form-select" name="genero" id="genero" required>
-                                                                <option value="Femenino"> Femenino </option>
-                                                                <option value="Masculino"> Masculino </option>
-                                                            </select>
                                                         </div>
 
                                                         <div class="mb-3">
                                                             <label for="fechaNacimiento">Fecha de Nacimiento:</label>
-                                                            <input type="date"  value="{{ jugador.fechaNacimiento }}" 
+                                                            <input type="date"  value="{{ jugador.fechaNacimiento|date:'Y-m-d' }}" 
                                                             name="fechaNacimiento" id="fechaNacimiento" class="form-control" 
                                                                    min="1800-01-01" max="2021-12-31" required>
                                                         </div>
@@ -272,9 +264,11 @@
                                                         <div class="mb-3">
                                                             <label for="club">Elige club:</label>
                                                             <select class="form-select" name="club" id="club" required>
-                                                                <option value="" disabled selected>Selecciona un club</option>
+                                                                <option value="" disabled>Selecciona un club</option>
                                                                 {% for club in clubes %}
-                                                                    <option value="{{ club.id }}">{{ club.nombre }}</option>
+                                                                    <option value="{{ club.id }}" {% if jugador.club.nombre == club.nombre %} selected {% endif %}>
+                                                                        {{ club.nombre }}
+                                                                    </option>
                                                                 {% endfor %}
                                                             </select>
                                                         </div>

@@ -28,9 +28,9 @@ def padronHome(request):
 
     search = request.GET.get('search', '')
 
-    # Búsqueda por nombre
+    # Búsqueda por club
     if search:
-        padron = padron.filter(nombre__icontains=search) # __icontains filtra los clubes que contienen la busqueda, la i hace que sea insensible a mayusculas
+        padron = padron.filter(club__nombre__icontains=search) # __icontains filtra los clubes que contienen la busqueda(nombre), la i hace que sea insensible a mayusculas
 
     # Filtrar por categoría segun el id pasado por parametro
     if categoria:
@@ -67,7 +67,6 @@ def createJugador(request):
         p_apellido = request.POST.get('apellido')  
         p_idTipoDoc = Tipo_doc.objects.get(tipoDoc = request.POST.get('opciones'))
         p_nroDoc = request.POST.get('Documento') 
-        p_genero = request.POST.get('genero') 
         p_club = request.POST.get('club')
         p_email = request.POST.get('email')  
         p_fechaNacimiento = request.POST.get('fechaNacimiento')  

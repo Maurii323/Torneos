@@ -92,10 +92,7 @@ WSGI_APPLICATION = 'torneosFutbol.wsgi.application'
 if not DEBUG:
     DATABASES = {
         # lee las variables de entorno de la base de datos de render
-        'default': dj_database_url.config(
-            default='postgresql://postgres:postgres@localhost/postgres',    # Postgresql
-            conn_max_age=600
-        )
+        'default': dj_database_url.config(conn_max_age=600)
     }
 else:
     DATABASES = {

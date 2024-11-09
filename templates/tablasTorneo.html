@@ -16,7 +16,7 @@
                 </ul>
             {% endif %}
 
-            <div class="col-2">
+            <div class="col-12 col-md-2">
                 <div class="p-4 mb-4 bg-light rounded-3 custom-shadow">
                     <h3 >Menú</h3>
                     <!-- Muestra todos los torneos y permite seleccionar uno -->
@@ -37,7 +37,7 @@
                 </div>
             </div>
             {% if torneo %}
-            <div class="col-10">
+            <div class="col-12 col-md-10">
                 <!-- paginación-->
                 <div class="row mb-2">
                     <!-- nombre del torneo -->
@@ -86,27 +86,27 @@
                 <table class="table table-striped-columns table-light table-bordered table-sm">
                     <thead class=" table-success">
                         <tr class="row">
-                            <th class="col-1">Posicion</th>
+                            <th class="col-2">Posicion</th>
                             <th class="col-3">Club</th>
                             <th class="col-2">Puntos</th>
                             <th class="col-1">PJ</th>
                             <th class="col-1">PG</th>
                             <th class="col-1">PP</th>
                             <th class="col-1">PE</th>
-                            <th class="col-2">Dif Gol</th>
+                            <th class="col-1">Dif Gol</th>
                         </tr>
                     </thead>
                     <tbody >
                         {% for posicion in posiciones %}
                             <tr class="row">
-                                <th class="col-1" scope="row"> {{posicion.posicion}} </th>
+                                <th class="col-2" scope="row"> {{posicion.posicion}} </th>
                                 <td class="col-3"> {{posicion.club}} </td>
                                 <td class="col-2 fw-bold"> {{posicion.puntaje}} </td>
                                 <td class="col-1"> {{posicion.partidosJugados}} </td>
                                 <td class="col-1"> {{posicion.partidosGanados}} </td>
                                 <td class="col-1"> {{posicion.partidosPerdidos}} </td>
                                 <td class="col-1"> {{posicion.partidosEmpatados}} </td>
-                                <td class="col-2"> {{posicion.diferenciaJuegos}} </td>
+                                <td class="col-1"> {{posicion.diferenciaJuegos}} </td>
                             </tr>
                         {% endfor %}
                     </tbody>

@@ -16,12 +16,14 @@
                 </ul>
             {% endif %}
 
-            <div class="col-2 ">
+            <div class="col col-md-2">
                 <div class="p-4 mb-4 bg-light rounded-3 custom-shadow ">
                     <h3 >Menú</h3>
                     
                     <!-- Modal para ingresar club -->
-                    <button type="button" class="btn btn-dark mb-3 login-button" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">Ingresar Club</button>
+                    <button type="button" class="btn btn-dark mb-3 login-button" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">
+                        Alta Club
+                    </button>
                     <div class="modal fade" id="ingresarModal" tabindex="-1" aria-labelledby="ingresarModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content section-general border">
@@ -68,7 +70,7 @@
             </div>
             
             {% if clubes %}
-            <div class="col-10">
+            <div class=" col col-md-10">
                 <!-- Filtros y paginación-->
                 <div class="row mb-2 ">
                     <!-- Botones de paginación -->

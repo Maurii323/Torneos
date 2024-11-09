@@ -3,7 +3,7 @@
 {% block content %}
 <div class="fondo2 content-wrapper">
     <main class="container full-height text-center">
-        <h1 class="display-5 text-white fw-semibold"> Padron </h1>
+        <h1 class="display-5 text-white fw-semibold"> Padrón </h1>
         <div class="row">
             <!-- muestra los mensajes de exito/error del sistema de mensajes de django -->
             {% if messages %}
@@ -20,12 +20,14 @@
                 {{mensaje}}
             </h4> -->
 
-            <div class="col-2">
+            <div class="col col-md-2">
                 <div class="p-4 mb-4 bg-light rounded-3 custom-shadow">
                     <h3 >Menú</h3>
 
                     <!-- modal para Dar de alta un jugador -->
-                    <button type="button" class="btn btn-dark mb-3 login-button" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">Dar de alta jugador</button>
+                    <button type="button" class="btn btn-dark mb-3 login-button" data-bs-toggle="modal" data-bs-target="#ingresarModal" data-bs-whatever="@mdo">
+                        Alta Jugador
+                    </button>
                     <div class="modal fade" id="ingresarModal" tabindex="-1" aria-labelledby="ingresarModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content section-general border"><i class="bi bi-save-fill icono-persona"></i>
@@ -112,7 +114,7 @@
                 </div>
             </div>
             {% if padron %}
-            <div class="col-10">
+            <div class="col col-md-10">
                 <!-- Filtros y paginación-->
                 <div class="row mb-2">
                     <!-- Botones de paginación -->

@@ -3,72 +3,61 @@
 {% block content %}
 <div class="fondo1 content-wrapper">
 
-    <main class="container py-5">
-        <section class=" text-dark fw-bold ">
-             <h1 class="display-3 text-center">Gestion de Torneos</h1>
-             <h5> ¡Bienvenido {{user.username}} a mi proyecto de administración de torneos!</h5>
-             <p>
-                 Este es un proyecto personal en django, y representa una parte importante de mi portfolio como desarrollador.            
-             </p>
-             <h5>Caracteristicas principales de la aplicacion</h5>
-             <ul>
-                <li>
+    <main class="container py-3">
+        <section class="text-dark">
+            <h1 class="display-3 text-center">Gestión de Torneos</h1>
+            <h5 class="text-center">¡Bienvenido {{user.username}} a mi proyecto de administración de torneos!</h5>
+            <h5 class="text-center">Características principales de la aplicación</h5>
+            <div class="row">
+                <div class="col-5 card card-body m-4">
                     <p>
-                        Registro y Login de Usuarios: Sistema de registro y autenticación que permite a los usuarios crear cuentas y acceder de manera segura a sus torneos.
+                        <span class="fw-bold">Registro y Login de Usuarios</span>: Sistema de registro y autenticación que permite a los usuarios crear cuentas y acceder de manera segura a sus torneos.
                     </p>
-                </li>
-
-                 <li>
-                     <p>
-                         Gestion de clubes: Funcionalidades completas de CRUD (Crear, Leer, Actualizar, Eliminar) para facilitar la gestión de los clubes de la organizacion.
-                     </p>
-                 </li>
-
-                 <li>
+                </div>
+        
+                <div class="col-5 card card-body m-4">
                     <p>
-                        Gestion de padron: Funcionalidades completas de CRUD (Crear, Leer, Actualizar, Eliminar) para la gestión de los jugadores de cada club.
+                        <span class="fw-bold">Gestión de clubes</span>: Funcionalidades completas de CRUD (Crear, Leer, Actualizar, Eliminar) para facilitar la gestión de los clubes de la organización.
                     </p>
-                </li>
-
-                <li>
+                </div>
+        
+                <div class="col-5 card card-body m-4">
                     <p>
-                        Gestion de torneos: Funcionalidades para crear torneos, generando un fixture del mismo con todos los clubes asociado al usuario,
-                        permitiendo actualizar el resultado de todos los partidos del fixture.
+                        <span class="fw-bold">Gestión de padrón</span>: Funcionalidades completas de CRUD (Crear, Leer, Actualizar, Eliminar) para la gestión de los jugadores de cada club.
                     </p>
-                </li>
-
-                <li>
+                </div>
+        
+                <div class="col-5 card card-body m-4">
                     <p>
-                        Tablas de posiciones: Funcionalidades para calcular las tablas de posiciones segun el resultado de los partidos, facilitando el seguimiento de los torneos.
+                        <span class="fw-bold">Gestión de torneos</span>: Funcionalidades para crear torneos, generando un fixture del mismo con todos los clubes asociados al usuario, permitiendo actualizar el resultado de todos los partidos del fixture.
                     </p>
-                </li>
- 
-                 <li>
-                     <p>
-                         Base de Datos SQLite3: Utilización de SQLite3 como base de datos para almacenar de manera segura y eficiente la información. En produccion se utiliza POSTGRESQL.
-                     </p>
-                 </li>
-                 <li>
-                     <p>
-                         bootstrap: Utilizacion de bootstrap para los estilos de la aplicacion.
-                     </p>
-                 </li>
-             </ul>
-             <p>Gracias por su visita y su interés.</p>
-                 
- 
-             {% if not user.is_authenticated %}
-                 <div class="text-center">
-                     <a class= "btn btn-dark" href="{% url 'register' %}"> Registrarse</a>
-                     <a class= "btn btn-dark" href="{% url 'login' %}"> Iniciar Sesión</a>
-                 </div>
-             {% else %}
-                 <div class="text-center py-2">
-                     <a class= "btn btn-dark" href="{% url 'clubHome' %}"> Gestionar clubes</a>
-                     <a class= "btn btn-dark" href="{% url 'logout' %}"> Cerrar Sesión</a>
-                 </div>
-             {% endif %}
-         </section>
+                </div>
+        
+                <div class="col-5 card card-body m-4">
+                    <p>
+                        <span class="fw-bold">Tablas de posiciones</span>: Funcionalidades para calcular las tablas de posiciones según el resultado de los partidos, facilitando el seguimiento de los torneos.
+                    </p>
+                </div>
+        
+                <div class="col-5 card card-body m-4">
+                    <p>
+                        <span class="fw-bold">SQLite3 y Bootstrap</span>: Utilización de SQLite3 como base de datos y Bootstrap para los estilos de la aplicación. En producción utiliza PostgreSQL como base de datos.
+                    </p>
+                </div>
+            </div>
+        
+            {% if not user.is_authenticated %}
+                <div class="text-center">
+                    <a class="btn btn-dark" href="{% url 'register' %}">Registrarse</a>
+                    <a class="btn btn-dark" href="{% url 'login' %}">Iniciar Sesión</a>
+                </div>
+            {% else %}
+                <div class="text-center py-2">
+                    <a class="btn btn-dark" href="{% url 'clubHome' %}">Gestionar clubes</a>
+                    <a class="btn btn-dark" href="{% url 'logout' %}">Cerrar Sesión</a>
+                </div>
+            {% endif %}
+        </section>
      </main>
 </div>
 {% endblock %}

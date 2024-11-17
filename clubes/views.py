@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages     # sistema de mensajes de django para mostrar errores o mensajes de confirmacion
 from django.urls import reverse         # simplifica el redireccionamiento y permite enviar parametros
 from django.core.paginator import Paginator     # divide listas en paginas de x elementos 
-
+from django.db import IntegrityError
 # importa el decorador que comprueba que el que accede a esa vista este logueado
 from django.contrib.auth.decorators import login_required
 # importa los modelos que estan relacionado a los clubes
@@ -75,8 +75,11 @@ def createClub(request):
         # envia ese mensaje con el sistema de mensajes de django
         messages.success(request, f"Se ha creado el club '{club.nombre}' exitosamente")
         return redirect(reverse('clubHome'))
-    except:                         # maneja la excepcion de que el club ya existe en la base de datos
-        messages.error(request, f"el nombre del club ingresado ya existe")
+    except IntegrityError:  # Captura específicamente errores de integridad
+        messages.error(request, f"El nombre del club ingresado ya existe")
+        return redirect(reverse('clubHome'))
+    except Exception as e:
+        messages.error(request, f"Error inesperado: {e}")
         return redirect(reverse('clubHome'))
 
 

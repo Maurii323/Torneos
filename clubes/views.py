@@ -75,8 +75,8 @@ def createClub(request):
         # envia ese mensaje con el sistema de mensajes de django
         messages.success(request, f"Se ha creado el club '{club.nombre}' exitosamente")
         return redirect(reverse('clubHome'))
-    except IntegrityError:  # Captura específicamente errores de integridad
-        messages.error(request, f"El nombre del club ingresado ya existe")
+    except IntegrityError as e:  # Captura específicamente errores de integridad
+        messages.error(request, f"El nombre del club ingresado ya existe: Detalles: {e}")
         return redirect(reverse('clubHome'))
     except Exception as e:
         messages.error(request, f"Error inesperado: {e}")

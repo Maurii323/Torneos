@@ -5,7 +5,6 @@ from django.contrib.auth.models import User # importa el modelo User predetermin
 from clubes.models import Club
 
 class Tipo_doc(models.Model):
-    id = models.IntegerField(primary_key = True)
     tipoDoc = models.CharField(max_length = 45)
     descripcion = models.CharField(max_length = 200)
 
@@ -13,7 +12,6 @@ class Tipo_doc(models.Model):
         return self.tipoDoc
 
 class Padron(models.Model):
-    id = models.IntegerField(primary_key = True)
     user = models.ForeignKey(User,null = False, on_delete = models.CASCADE)
     idTipoDoc = models.ForeignKey(Tipo_doc, null = False, on_delete = models.PROTECT) # no permite que se borre ese atributo en la tabla club_Categoria.
     nroDoc = models.IntegerField(null = False,unique=True)

@@ -3,7 +3,7 @@ from django.contrib.auth.models import User # importa el modelo User predetermin
 
 # Create your models here.
 class Club(models.Model):
-    id = models.IntegerField(primary_key = True)
+    # El id como primary key lo genera automaticamente django
     user = models.ForeignKey(User,null = False, on_delete = models.CASCADE)
     nombre = models.CharField(max_length = 45, null = False, unique=True)  # no puede ser nulo, es unico
     direccion = models.CharField(max_length = 45, null = False)

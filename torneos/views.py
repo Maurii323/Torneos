@@ -63,7 +63,7 @@ def createTorneo(request):
         )
         torneo.save()
         # algoritmo para generar el fixture
-        clubes = list(Club.objects.filter())
+        clubes = list(Club.objects.filter(user = request.user)) # Busca todos los clubes asociados al usuario
         # maneja la excepcion de que no hayan 2 clubes o mas
         if len(clubes) < 2:
             raise ValueError("Se necesitan al menos 2 clubes para generar un fixture.")
@@ -148,8 +148,8 @@ def modificarPartido(request, IDPartido):
 # Muestra la tabla de posiciones del torneo seleccionado, si no tiene un id de torneo como parametro, muestra los torneos disponibles
 @login_required
 def tablasHome(request,IDTorneo = None):
-    # Obtiene todos los torneos para poder seleccionarlos
-    torneos = Torneo.objects.filter()
+    # Obtiene todos los torneos asociados al usuario para poder seleccionarlos
+    torneos = Torneo.objects.filter(user = request.user)
     
     # Si no se paso id por parametro, solamente retorna los torneos, si se pasó retorna la tabla de posiciones
     if IDTorneo is None:

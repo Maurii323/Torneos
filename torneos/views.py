@@ -56,17 +56,20 @@ def createTorneo(request):
     p_fechaInicio = datetime.now()
 
     try:
+        clubes = list(Club.objects.filter(user = request.user)) # Busca todos los clubes asociados al usuario
+        # maneja la excepcion de que no hayan 2 clubes o mas
+        if len(clubes) < 2:
+            raise ValueError("Se necesitan al menos 2 clubes para generar un fixture.")
+    
         torneo = Torneo(                # crea el torneo
             nombre = p_nombre,
             user = p_user, 
             fechaInicio = p_fechaInicio
         )
         torneo.save()
+        
         # algoritmo para generar el fixture
-        clubes = list(Club.objects.filter(user = request.user)) # Busca todos los clubes asociados al usuario
-        # maneja la excepcion de que no hayan 2 clubes o mas
-        if len(clubes) < 2:
-            raise ValueError("Se necesitan al menos 2 clubes para generar un fixture.")
+
         # Para que funcione si el número de equipos es impar(agrega un equipo fantasma para la fecha libre)
         if len(clubes) % 2 != 0:
             clubes.append(None)  
@@ -117,7 +120,7 @@ def deleteTorneo(request,IDTorneo):
 
 # permite modificar un partido actualizando el puntaje de cada equipo
 @login_required
-def modificarPartido(request, IDPartido):
+def modificarPartido(request, IDPartido, page):
     partido = get_object_or_404(Partido, pk=IDPartido)
     golesLocal = request.POST['local']
     golesVisita = request.POST.get('visitante')
@@ -126,10 +129,14 @@ def modificarPartido(request, IDPartido):
     try:
         if int(golesLocal) < 0 or int(golesVisita) < 0:
             messages.error(request, f"Error al actualizar el partido: Ingreso un valor negativo")
-            return redirect(reverse('torneoHome'))
+            # Construye la URL con el torneo y la pagina como parametros
+            url = f"{reverse('torneoHome', kwargs={'IDTorneo': torneo.id})}?page={page}"
+            return redirect(url)
     except:
         messages.error(request, f"Error al actualizar el partido: No ingreso un valor numerico")
-        return redirect(reverse('torneoHome'))
+        # Construye la URL con el torneo y la pagina como parametros
+        url = f"{reverse('torneoHome', kwargs={'IDTorneo': torneo.id})}?page={page}"
+        return redirect(url)
     
     # Realiza la actualizacion del partido
     try:
@@ -139,7 +146,9 @@ def modificarPartido(request, IDPartido):
         # de que torneo pertenece el partido
         torneo = partido.jornada.torneo
         messages.success(request, f"Se ha modificado el partido {partido.local} - {partido.visitante} exitosamente")
-        return redirect(reverse('torneoHome', kwargs={'IDTorneo': torneo.id}))
+        # Construye la URL con el torneo y la pagina como parametros
+        url = f"{reverse('torneoHome', kwargs={'IDTorneo': torneo.id})}?page={page}"
+        return redirect(url)
     except Exception as e:
         messages.error(request, f"Error al actualizar el partido: {str(e)}")
         return redirect(reverse('torneoHome'))

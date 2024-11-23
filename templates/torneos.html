@@ -189,7 +189,7 @@
                                             </div>
                                             
                                             <section class="modal-body">
-                                                <form method="POST" action="{% url 'modificarPartido' partido.id %}">
+                                                <form method="POST" action="{% url 'modificarPartido' partido.id jornadas.number %}">
                                                     {% csrf_token %}
                                                     <div class="mb-3">
                                                         <label for="local">Ingrese los goles del equipo local {{partido.local}}:</label>
